@@ -1,0 +1,10 @@
+newmtl Vases
+d 1
+Kd 1 1 1
+map_Kd Vases_BaseColor.jpg
+
+newmtl Plant_03
+d 1
+Kd 1 1 1
+map_Kd Plant_BaseColor.jpg
+
