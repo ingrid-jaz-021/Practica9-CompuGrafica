@@ -159,7 +159,8 @@ int main()
 	Shader lightingShader("Shader/lighting.vs", "Shader/lighting.frag");
 	Shader lampShader("Shader/lamp.vs", "Shader/lamp.frag");
 	
-	Model Dog((char*)"Models/ball.obj");
+	//Model Dog((char*)"Models/ball.obj");
+	Model Football((char*)"Models/Football.obj");
 	Model Piso((char*)"Models/piso.obj");
 
 
@@ -316,11 +317,13 @@ int main()
 
 	
 		model = glm::mat4(1);
+		model = glm::scale(model, glm::vec3(6.0f, 6.0f, 6.0f));
 		glEnable(GL_BLEND);//Avtiva la funcionalidad para trabajar el canal alfa
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glUniform1i(glGetUniformLocation(lightingShader.Program, "transparency"), 1);
-	    Dog.Draw(lightingShader);
+	    //Dog.Draw(lightingShader);
+		Football.Draw(lightingShader);
 		glDisable(GL_BLEND);  //Desactiva el canal alfa 
 		glBindVertexArray(0);
 	
