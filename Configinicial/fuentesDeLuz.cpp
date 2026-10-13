@@ -159,7 +159,7 @@ int main()
 	Shader lightingShader("Shader/lighting.vs", "Shader/lighting.frag");
 	Shader lampShader("Shader/lamp.vs", "Shader/lamp.frag");
 	
-	Model Dog((char*)"Models/RedDog.obj");
+	Model Dog((char*)"Models/ball.obj");
 	Model Piso((char*)"Models/piso.obj");
 
 
@@ -278,6 +278,7 @@ int main()
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight.ambient"), 0.0f, 0.0f, 0.0f);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight.diffuse"), 2.0f, 0.0f, 2.0f);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight.specular"),2.0f, 0.0f, 2.0f);
+		// Constantes de atenuación
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight.constant"), 1.0f);
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight.linear"), 0.4f);
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight.quadratic"), 0.7f);
@@ -315,12 +316,12 @@ int main()
 
 	
 		model = glm::mat4(1);
-		//glEnable(GL_BLEND);//Avtiva la funcionalidad para trabajar el canal alfa
+		glEnable(GL_BLEND);//Avtiva la funcionalidad para trabajar el canal alfa
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		glUniform1i(glGetUniformLocation(lightingShader.Program, "transparency"), 0);
+		glUniform1i(glGetUniformLocation(lightingShader.Program, "transparency"), 1);
 	    Dog.Draw(lightingShader);
-		//glDisable(GL_BLEND);  //Desactiva el canal alfa 
+		glDisable(GL_BLEND);  //Desactiva el canal alfa 
 		glBindVertexArray(0);
 	
 
