@@ -1,4 +1,4 @@
-// Previo #9
+// Práctica #9
 // Serrano Cuevas Ingrid Jazmín
 // Fecha de entrerga: 12 de octubre de 2026.
 // 319213197
@@ -121,7 +121,7 @@ int main()
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);*/
 
 	// Create a GLFWwindow object that we can use for GLFW's functions
-	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Previo 9 - Ingrid Serrano", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Practica 9 - Ingrid Serrano", nullptr, nullptr);
 
 	if (nullptr == window)
 	{
@@ -159,9 +159,15 @@ int main()
 	Shader lightingShader("Shader/lighting.vs", "Shader/lighting.frag");
 	Shader lampShader("Shader/lamp.vs", "Shader/lamp.frag");
 	
-	//Model Dog((char*)"Models/ball.obj");
-	Model Football((char*)"Models/Football.obj");
-	Model Piso((char*)"Models/piso.obj");
+	Model Dog((char*)"Models/RedDog.obj");
+	//Model Football((char*)"Models/Football.obj");
+	//Model Piso((char*)"Models/piso.obj");
+	Model PisoBlanco((char*)"Models/Carpet.obj");
+	Model mesa((char*)"Models/Mesa.obj");
+	Model doctor((char*)"Models/Doctor.obj");
+	Model corgi((char*)"Models/Corgi2.obj");
+	Model medkit((char*)"Models/MedKit.obj");
+	Model planta((char*)"Models/pot.obj");
 
 
 
@@ -309,22 +315,62 @@ int main()
 	
 
 		//Carga de modelo 
-        view = camera.GetViewMatrix();	
-		model = glm::mat4(1);
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		Piso.Draw(lightingShader);
+        view = camera.GetViewMatrix();
 
-
+		// Piso Blanco
+		glm::mat4 modelPiso = glm::mat4(1);
+		modelPiso = glm::translate(modelPiso, glm::vec3(-1.5f, -1.25f, 2.3f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelPiso));
+		PisoBlanco.Draw(lightingShader);
 	
-		model = glm::mat4(1);
-		model = glm::scale(model, glm::vec3(6.0f, 6.0f, 6.0f));
-		glEnable(GL_BLEND);//Avtiva la funcionalidad para trabajar el canal alfa
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		glUniform1i(glGetUniformLocation(lightingShader.Program, "transparency"), 1);
+		// Transparencias
+		//model = glm::mat4(1);
+		////glEnable(GL_BLEND);//Avtiva la funcionalidad para trabajar el canal alfa
+		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		//glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//glUniform1i(glGetUniformLocation(lightingShader.Program, "transparency"), 0);
 	    //Dog.Draw(lightingShader);
-		Football.Draw(lightingShader);
-		glDisable(GL_BLEND);  //Desactiva el canal alfa 
+		////Football.Draw(lightingShader);
+		////glDisable(GL_BLEND);  //Desactiva el canal alfa 
+
+		// Perrito (RedDog)
+		glm::mat4 modelDog(1);
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelDog));
+		Dog.Draw(lightingShader);
+
+		// Mesa
+		glm::mat4 modelMesa(1);
+		modelMesa = glm::translate(modelMesa, glm::vec3(0.0f, -1.2f, 0.0f));
+		modelMesa = glm::scale(modelMesa, glm::vec3(5.0f, 2.5f, 2.5f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelMesa));
+		mesa.Draw(lightingShader);
+
+		// Doctor
+		glm::mat4 modelDoctor(1);
+		modelDoctor = glm::translate(modelDoctor, glm::vec3(-0.5f, -1.2f, -1.2f));
+		modelDoctor = glm::scale(modelDoctor, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelDoctor));
+		doctor.Draw(lightingShader);
+
+		// Perro corgi
+		glm::mat4 modelCorgi(1);
+		modelCorgi = glm::translate(modelCorgi, glm::vec3(2.0f, -1.24f, 0.0f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelCorgi));
+		corgi.Draw(lightingShader);
+
+		// Botiquín primeros auxilios
+		glm::mat4 modelMedKit(1);
+		modelMedKit = glm::translate(modelMedKit, glm::vec3(0.5f, -0.38f, 0.0f));
+		modelMedKit = glm::scale(modelMedKit, glm::vec3(0.008f, 0.008f, 0.008f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelMedKit));
+		medkit.Draw(lightingShader);
+
+		// Planta
+		glm::mat4 modelPlanta(1);
+		modelPlanta = glm::translate(modelPlanta, glm::vec3(-1.5f, -1.24f, 0.0f));
+		modelPlanta = glm::scale(modelPlanta, glm::vec3(0.04f, 0.04f, 0.04f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelPlanta));
+		planta.Draw(lightingShader);
 		glBindVertexArray(0);
 	
 
