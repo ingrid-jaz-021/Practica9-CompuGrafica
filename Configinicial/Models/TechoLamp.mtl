@@ -1,0 +1,9 @@
+# Blender 4.5.4 LTS MTL File: 'Minimalist_Pendant_Lamp.blend'
+# www.blender.org
+
+newmtl Minimalist_Pendant_Lamp
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.500000
+illum 2
+map_Kd TechoLamp.png

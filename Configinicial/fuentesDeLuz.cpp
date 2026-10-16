@@ -1,6 +1,6 @@
 // Práctica #9
 // Serrano Cuevas Ingrid Jazmín
-// Fecha de entrerga: 12 de octubre de 2026.
+// Fecha de entrerga: 17 de octubre de 2026.
 // 319213197
 
 #include <iostream>
@@ -168,6 +168,8 @@ int main()
 	Model corgi((char*)"Models/Corgi2.obj");
 	Model medkit((char*)"Models/MedKit.obj");
 	Model planta((char*)"Models/pot.obj");
+	Model TechoLamp((char*)"Models/TechoLamp.obj");
+
 
 
 
@@ -229,9 +231,9 @@ int main()
 
 		// Directional light
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.direction"), -0.2f, -1.0f, -0.3f);
-		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.ambient"),0.05f,0.05f,0.05f);
-		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.diffuse"), 0.3f, 0.3f, 0.3f);
-		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.specular"),0.1f, 0.1f, 0.1f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.ambient"),0.15f,0.15f,0.15f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.diffuse"), 0.4f, 0.4f, 0.4f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.specular"),0.15f, 0.15f, 0.15f);
 
 
 		// Point light 1
@@ -372,6 +374,13 @@ int main()
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelPlanta));
 		planta.Draw(lightingShader);
 		glBindVertexArray(0);
+
+		//Lampara del techo
+		glm::mat4 modelTechoLamp(1);
+		modelTechoLamp = glm::translate(modelTechoLamp, glm::vec3(0.0f, 1.0f, 0.3f));
+		//modelTechoLamp = glm::scale(modelTechoLamp, glm::vec3(0.008f, 0.008f, 0.008f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelTechoLamp));
+		TechoLamp.Draw(lightingShader);
 	
 
 		// Also draw the lamp object, again binding the appropriate shader
