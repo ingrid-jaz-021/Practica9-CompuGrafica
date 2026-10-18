@@ -169,6 +169,7 @@ int main()
 	Model medkit((char*)"Models/MedKit.obj");
 	Model planta((char*)"Models/pot.obj");
 	Model TechoLamp((char*)"Models/TechoLamp.obj");
+	Model ExploLamp((char*)"Models/ExploLamp.obj");
 
 
 
@@ -281,12 +282,12 @@ int main()
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[3].linear"), 0.0f);
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[3].quadratic"), 0.0f);
 
-		// SpotLight
+		// SpotLight (Cámara)
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight.position"), camera.GetPosition().x, camera.GetPosition().y, camera.GetPosition().z);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight.direction"), camera.GetFront().x, camera.GetFront().y, camera.GetFront().z);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight.ambient"), 0.0f, 0.0f, 0.0f);
-		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight.diffuse"), 2.0f, 0.0f, 2.0f);
-		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight.specular"),2.0f, 0.0f, 2.0f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight.diffuse"), 0.0f, 0.0f, 0.0f); // Luz morada
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight.specular"),0.0f, 0.0f, 0.0f);
 		// Constantes de atenuación
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight.constant"), 1.0f);
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight.linear"), 0.4f);
@@ -294,6 +295,23 @@ int main()
 		// Ángulos de apertura para la intensidad (interno - externo)
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight.cutOff"), glm::cos(glm::radians(12.5f)));
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight.outerCutOff"), glm::cos(glm::radians(15.0f)));
+
+		// SpotLight 2: Lámpara de Exploración 
+		// Ajusta 'y' y 'z' para que coincida con el foco de tu modelo
+		glm::vec3 exploLampPos(-0.25f, 0.4f, 0.0f);
+		// Dirección apuntando hacia abajo y ligeramente hacia el centro
+		glm::vec3 exploLampDir(0.3f, -1.0f, 0.0f);
+
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight2.position"), exploLampPos.x, exploLampPos.y, exploLampPos.z);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight2.direction"), exploLampDir.x, exploLampDir.y, exploLampDir.z);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight2.ambient"), 0.0f, 0.0f, 0.0f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight2.diffuse"), 3.0f, 3.0f, 0.0f); // Luz azul
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight2.specular"), 3.0f, 3.0f, 0.0f);
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight2.constant"), 1.0f);
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight2.linear"), 0.14f);
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight2.quadratic"), 0.07f);
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight2.cutOff"), glm::cos(glm::radians(15.5f)));
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight2.outerCutOff"), glm::cos(glm::radians(18.0f)));
 
 		// Set material properties
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "material.shininess"), 16.0f);
@@ -375,11 +393,18 @@ int main()
 		planta.Draw(lightingShader);
 		glBindVertexArray(0);
 
-		//Lampara del techo
+		// Lampara del techo
 		glm::mat4 modelTechoLamp(1);
 		modelTechoLamp = glm::translate(modelTechoLamp, glm::vec3(0.0f, 1.9f, -1.0f));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelTechoLamp));
 		TechoLamp.Draw(lightingShader);
+
+		// Lampara de exploración
+		glm::mat4 modelExploLamp(1);
+		modelExploLamp = glm::translate(modelExploLamp, glm::vec3(-0.4f, -0.38f, 0.0f));
+		modelExploLamp = glm::scale(modelExploLamp, glm::vec3(0.04f, 0.05f, 0.04f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelExploLamp));
+		ExploLamp.Draw(lightingShader);
 	
 
 		// Also draw the lamp object, again binding the appropriate shader
@@ -406,6 +431,14 @@ int main()
 			glBindVertexArray(VAO);
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
+
+		// Dibujar otro cubo en la lámpara de exploración
+		model = glm::mat4(1);
+		model = glm::translate(model, exploLampPos);
+		model = glm::scale(model, glm::vec3(0.1f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
 		glBindVertexArray(0);
 
 
