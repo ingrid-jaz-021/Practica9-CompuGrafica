@@ -50,8 +50,8 @@ bool active;
 
 // Positions of the point lights
 glm::vec3 pointLightPositions[] = {
-	glm::vec3(0.0f, 1.9f, -1.0f),
-	glm::vec3(0.0f,0.0f, 0.0f),
+	glm::vec3(0.0f, 1.9f, -1.0f), // Lámpara de techo
+	glm::vec3(1.5f, -0.38f, 0.0f), // Luz corazon
 	glm::vec3(0.0f,0.0f,  0.0f),
 	glm::vec3(0.0f,0.0f, 0.0f)
 };
@@ -170,7 +170,7 @@ int main()
 	Model planta((char*)"Models/pot.obj");
 	Model TechoLamp((char*)"Models/TechoLamp.obj");
 	Model ExploLamp((char*)"Models/ExploLamp.obj");
-
+	Model corazon((char*)"Models/Heart.obj");
 
 
 
@@ -237,7 +237,7 @@ int main()
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.specular"),0.15f, 0.15f, 0.15f);
 
 
-		// Point light 1
+		// Point light 1 - Lámpara Techo
 		glm::vec3 lightColor;
 		lightColor.x = 0.5f; // Componente Roja
 		lightColor.y = 0.5f; // Componente Verde
@@ -255,14 +255,14 @@ int main()
 
 
 
-		// Point light 2
+		// Point light 2 - Lámpara Corgi
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[1].position"), pointLightPositions[1].x, pointLightPositions[1].y, pointLightPositions[1].z);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[1].ambient"), 0.05f, 0.05f, 0.05f);
-		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[1].diffuse"), 0.0f, 0.0f, 0.0f);
-		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[1].specular"), 0.0f, 0.0f, 0.0f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[1].diffuse"), 2.0f, 0.0f, 2.0f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[1].specular"), 2.0f, 0.0f, 2.0f);
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[1].constant"), 1.0f);
-		glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[1].linear"), 0.0f);
-		glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[1].quadratic"), 0.0f);
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[1].linear"), 1.5f);
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[1].quadratic"), 3.0f);
 
 		// Point light 3
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[2].position"), pointLightPositions[2].x, pointLightPositions[2].y, pointLightPositions[2].z);
@@ -305,7 +305,7 @@ int main()
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight2.position"), exploLampPos.x, exploLampPos.y, exploLampPos.z);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight2.direction"), exploLampDir.x, exploLampDir.y, exploLampDir.z);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight2.ambient"), 0.0f, 0.0f, 0.0f);
-		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight2.diffuse"), 3.0f, 3.0f, 0.0f); // Luz azul
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight2.diffuse"), 3.0f, 3.0f, 0.0f); // Luz amarillo
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "spotLight2.specular"), 3.0f, 3.0f, 0.0f);
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight2.constant"), 1.0f);
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight2.linear"), 0.14f);
@@ -405,6 +405,13 @@ int main()
 		modelExploLamp = glm::scale(modelExploLamp, glm::vec3(0.04f, 0.05f, 0.04f));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelExploLamp));
 		ExploLamp.Draw(lightingShader);
+
+		// Corazón
+		glm::mat4 modelHeart(1);
+		modelHeart = glm::translate(modelHeart, glm::vec3(1.5f, -0.38f, 0.0f));
+		modelHeart = glm::scale(modelHeart, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelHeart));
+		corazon.Draw(lightingShader);
 	
 
 		// Also draw the lamp object, again binding the appropriate shader
